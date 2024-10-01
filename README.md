@@ -38,3 +38,11 @@ Reflectify is a mental health app designed to help college students manage their
 
 Reflectify is built with the unique pressures of college life in mind. Between academic demands, social life, and personal growth, balancing mental well-being can be challenging. Reflectify empowers students to prioritize their emotional health with easy-to-use features that fit into their daily lives. Whether you're managing stress, building healthy habits, or seeking support, Reflectify has you covered.
 
+---
+
+## 🖥️ Tech Stack:
+
+- Frontend:
+- Backend:
+- Database:
+
