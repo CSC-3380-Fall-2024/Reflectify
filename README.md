@@ -42,7 +42,7 @@ Reflectify is built with the unique pressures of college life in mind. Between a
 
 ## 🖥️ Tech Stack:
 
-- Frontend: Typescript
-- Backend: Python
+- Frontend: React with Typescript
+- Backend: Python Django
 - Database: MySQL
 
