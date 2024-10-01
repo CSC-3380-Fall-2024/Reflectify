@@ -32,7 +32,16 @@ Reflectify is a mental health app designed to help college students manage their
 - Join community support forums to share experiences and find support.
 - Self-help tools and emergency resources are available when you need them most.
 
----
+--- 
+###  🚨 Emergency Contacts
+- Contacts for emergency support
+- Accessible Contacts:
+    - Crisis Hotline
+    - Medical Emergency
+    - National Maternal Mental Health Hotline
+    - Substance Abus and Mental Health Services Administration's National Helpline
+
+
 
 ## Why Reflectify?
 
@@ -45,4 +54,5 @@ Reflectify is built with the unique pressures of college life in mind. Between a
 - Frontend: React with Typescript
 - Backend: Python Django
 - Database: MySQL
+  
 
