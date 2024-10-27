@@ -1,0 +1,38 @@
+homepage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: white;
+  }
+  
+  h1 {
+    margin-bottom: 20px;
+  }
+  
+  .circle-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px; /* Space between circles */
+  }
+  
+  .circle-button {
+    width: 150px; /* Circle diameter */
+    height: 150px; /* Circle diameter */
+    border-radius: 50%; /* Makes the button circular */
+    background-color: gray; /* Circle color */
+    color: white; /* Text color */
+    border: none; /* Remove default border */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+  }
+  
+  .circle-button:hover {
+    background-color: darkgray; /* Change color on hover */
+  }
