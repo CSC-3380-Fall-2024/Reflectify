@@ -9,9 +9,7 @@ routes.register(r'authorization/register', RegisterViewSet, basename= 'authoriza
 routes.register(r'authorization/refresh', RefreshViewSet, basename = 'authorization-refresh' )
 
 routes.register(r'user', AccountViewSet, basename = 'user')
-routes.register(r'journal', JournalEntryViewSet, basename='journalentry')
+routes.register(r'journal', JournalEntryViewSet, basename='journal-entry')
 
-urlpatterns = [
-    *routes.urls
-]
+
 
