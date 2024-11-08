@@ -1,31 +1,28 @@
-from rest_framework import viewsets
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.decorators import action
-from .models import MoodQuestion, MoodResponse, MoodLog
-from .serializers import MoodQuestionSerializer, MoodResponseSerializer, MoodLogSerializer
+from rest_framework import status
+from .serializers import MoodInputSerializer, MoodOutputSerializer
 
-class MoodTrackingViewSet(viewsets.ViewSet):
-    def get_questions(self, request):
-        questions = MoodQuestion.objects.all()
-        serializer = MoodQuestionSerializer(questions, many = True)
-        return Response(serializer.data)
+@api_view(['POST'])
+def calculate_mood(request):
+    input_serializer = MoodInputSerializer(data=request.data)
+    
+    if input_serializer.is_valid():
+        answers = input_serializer.validated_data["answers"]
+        total_score = sum(answers)
+        average_score = total_score / len(answers)
 
-    def submit_responses(self, request):
-        user = request.user
-        responses = request.data.get('responses', [])
-        total_score = 0
-        response_objects = []
+        # Determine mood based on the average score
+        if average_score >= 4:
+            mood = "Happy"
+        elif average_score >= 3:
+            mood = "Neutral"
+        else:
+            mood = "Sad"
 
-        for response in responses:
-            question = MoodQuestion.objects.get(id = response['question_id'])
-            answer = response['answer']
-
-            score = question.options.index(answer) if answer in question.options else 0
-            total_score += score
-            response_obj = MoodResponse(user = user, question = question, answer = answer)
-            response_objects.append(response_obj)
-
-        MoodResponse.objects.bulk_create(response_objects)
-        mood_log = MoodLog.objects.create(user = user, score = total_score)
-
-        return Response(MoodLogSerializer(mood_log).data)
+        # Prepare the output using the output serializer
+        output_serializer = MoodOutputSerializer(data={"mood": mood, "score": total_score})
+        output_serializer.is_valid(raise_exception=True)
+        return Response(output_serializer.data)
+    
+    return Response(input_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
