@@ -1,0 +1,34 @@
+
+CREATE TABLE Accounts (
+    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NORT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE JournalEntries (
+    entry_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    title VARCHAR(100),
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES Accounts(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE JournalTags (
+    tag_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    tag_name VARCHAR(50) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES Accounts(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE EntryTags (
+    entry_id INT NOT NULL
+    tag_id INT NOT NULL
+    PRIMARY KEY (entry_id, tag_id),
+    FOREIGN KEY (entry_id) REFERENCES JournalEntries(entry_id) ON DELETE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES JournalTags(tag_id) ON DELETE CASCADE
+);
