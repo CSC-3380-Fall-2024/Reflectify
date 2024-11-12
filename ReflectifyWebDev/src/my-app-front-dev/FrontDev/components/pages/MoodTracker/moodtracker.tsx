@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Question, MoodResponse } from './types';
 import { questions } from './questions';
+import './moodtrack.css';
 
 const MoodTracker: React.FC = () => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
