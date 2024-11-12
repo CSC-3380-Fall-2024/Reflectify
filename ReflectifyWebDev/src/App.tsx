@@ -1,17 +1,35 @@
-import React from 'react';
-//import {BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'; 
+import React, {useState} from 'react';
+import {BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'; 
+import LoginPage from './my-app-front-dev/FrontDev/components/pages/LoginPage/logpage.tsx';
 import ReflectifyLogo from './my-app-front-dev/FrontDev/components/assets/ReflectifyLogo.png';
 import './App.css';
 import HomePage from './my-app-front-dev/FrontDev/components/pages/HomePage/homepage.tsx';
+//import MoodTracker from './my-app-front-dev/FrontDev/components/pages/MoodTracker/moodtrack.tsx';
 //import PersonalJournal from './my-app-front-dev/FrontDev/components/pages/PersonalJournal/perjournal.tsx';
 
-function App() {
-  return (
-      <div className="App">
-          <img src={ReflectifyLogo} alt="logo" />
-          <HomePage />
-      </div>
+
+const App: React.FC = () => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const handleLoginSuccess = () => {
+        setIsLoggedIn(true);
+    };
+    return (
+      <Router>
+        <div className="app">
+              <header className="App-header">
+                  <img src={ReflectifyLogo} alt="Reflectify Logo" className="logo" />
+              </header>
+              <main>
+          <Routes>
+              <Route path="/login" element={isLoggedIn ? <Navigate to="/" /> : <LoginPage onLoginSuccess={handleLoginSuccess} />} />
+              <Route path="/" element={isLoggedIn ? <HomePage /> : <Navigate to="/login" />} />
+              <Route path="*" element={<Navigate to="/login" />} />
+          </Routes>
+          </main>
+        </div>
+      </Router>
   );
-}
+};
 
 export default App;

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 //import ReflectifyLogo from './my-app-front-dev/FrontDev/components/assets/ReflectifyLogo.png';
 import './homepage.css';
 
@@ -10,9 +11,11 @@ const Homepage: React.FC = () => {
             </div>
             <div className="button-container">
                 {['Mood & Stress Tracker', 'Personal Journal', 'Habit Tracker', 'Team Challenges', 'Connect with Friends', 'Wellness Resources'].map((item, index) => (
-                    <button key={index} className="circle-button">
-                        {item}
-                    </button>
+                    //<Link to={`/${item.replace(/\s+/g, '-').toLowerCase()}`} key={index} className="circle-button-link">
+                        <button className="circle-button">
+                            {item}
+                        </button>
+                    //</Link>
                 ))}
             </div>
         </div>
