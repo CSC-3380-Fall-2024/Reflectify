@@ -5,7 +5,8 @@ import ReflectifyLogo from './my-app-front-dev/FrontDev/components/assets/Reflec
 import './App.css';
 import HomePage from './my-app-front-dev/FrontDev/components/pages/HomePage/homepage.tsx';
 //import MoodTracker from './my-app-front-dev/FrontDev/components/pages/MoodTracker/moodtrack.tsx';
-//import PersonalJournal from './my-app-front-dev/FrontDev/components/pages/PersonalJournal/perjournal.tsx';
+import PersonalJournal from './my-app-front-dev/FrontDev/components/pages/PersonalJournal/perjournal.tsx';
+import MoodStress from './my-app-front-dev/FrontDev/components/pages/MoodTracker/moodtracker.tsx';
 
 
 const App: React.FC = () => {
@@ -24,6 +25,8 @@ const App: React.FC = () => {
           <Routes>
               <Route path="/login" element={isLoggedIn ? <Navigate to="/" /> : <LoginPage onLoginSuccess={handleLoginSuccess} />} />
               <Route path="/" element={isLoggedIn ? <HomePage /> : <Navigate to="/login" />} />
+              <Route path = "/personal-journal" element={isLoggedIn ? <PersonalJournal /> : <Navigate to="/login" />} /> 
+              <Route path = "/mood-stress-tracker" element={isLoggedIn ? <MoodStress /> : <Navigate to="/login" />} /> 
               <Route path="*" element={<Navigate to="/login" />} />
           </Routes>
           </main>

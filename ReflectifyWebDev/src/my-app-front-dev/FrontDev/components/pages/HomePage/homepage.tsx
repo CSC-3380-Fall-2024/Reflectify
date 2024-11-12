@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
-//import ReflectifyLogo from './my-app-front-dev/FrontDev/components/assets/ReflectifyLogo.png';
 import './homepage.css';
 
 const Homepage: React.FC = () => {
@@ -10,13 +9,30 @@ const Homepage: React.FC = () => {
                 <h1>Welcome to Reflectify</h1>
             </div>
             <div className="button-container">
-                {['Mood & Stress Tracker', 'Personal Journal', 'Habit Tracker', 'Team Challenges', 'Connect with Friends', 'Wellness Resources'].map((item, index) => (
-                    //<Link to={`/${item.replace(/\s+/g, '-').toLowerCase()}`} key={index} className="circle-button-link">
-                        <button className="circle-button">
-                            {item}
-                        </button>
-                    //</Link>
-                ))}
+                <Link to="/mood-stress-tracker" className="circle-button-link">
+                    <button className="circle-button">
+                        Mood & Stress Tracker
+                    </button>
+                </Link>
+
+                <Link to="/personal-journal" className="circle-button-link">
+                    <button className="circle-button">
+                        Personal Journal
+                    </button>
+                </Link>
+                
+                <Link to="/another-page" className="circle-button-link">
+                    <button className="circle-button">
+                        Habit Tracker
+                    </button>
+                </Link>
+
+                <Link to="/another-page" className="circle-button-link">
+                    <button className="circle-button">
+                        Wellness Resources
+                    </button>
+                </Link>
+                {/* Other buttons can be added here similarly */}
             </div>
         </div>
     );
