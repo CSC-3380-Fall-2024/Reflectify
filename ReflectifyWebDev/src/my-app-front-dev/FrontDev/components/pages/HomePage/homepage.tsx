@@ -21,13 +21,25 @@ const Homepage: React.FC = () => {
                     </button>
                 </Link>
                 
-                <Link to="/another-page" className="circle-button-link">
+                <Link to="/habit-tracker" className="circle-button-link">
                     <button className="circle-button">
                         Habit Tracker
                     </button>
                 </Link>
 
                 <Link to="/another-page" className="circle-button-link">
+                    <button className="circle-button">
+                        Connect With Friends
+                    </button>
+                </Link>
+
+                <Link to="/another-page" className="circle-button-link">
+                    <button className="circle-button">
+                        Team Challenges
+                    </button>
+                </Link>
+
+                <Link to="/wellness-resources" className="circle-button-link">
                     <button className="circle-button">
                         Wellness Resources
                     </button>
