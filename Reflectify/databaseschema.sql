@@ -3,7 +3,7 @@ CREATE TABLE Accounts (
     user_id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(100) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NORT NULL,
+    password_hash VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -32,3 +32,24 @@ CREATE TABLE EntryTags (
     FOREIGN KEY (entry_id) REFERENCES JournalEntries(entry_id) ON DELETE CASCADE,
     FOREIGN KEY (tag_id) REFERENCES JournalTags(tag_id) ON DELETE CASCADE
 );
+
+CREATE TABLE HabitEntries(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    name VARCHAR (100) NOT NULL,
+    target INT NOT NULL,
+    frequency VARCHAR(50) NOT NULL CHECK(frequency IN ('daily', 'weekly')),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at  DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES auth_user(id) ON DELETE CASCADE
+    );
+
+CREATE TABLE HabitLogs(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    habit_id INT NOT NULL,
+    date DATE NOT NULL,
+    progress INT NOT NULL,
+    UNIQUE (habit_id,date),
+    FOREIGN KEY (habit_id) REFERENCES habits(id) ON DELETE CASCADE
+    );
+
