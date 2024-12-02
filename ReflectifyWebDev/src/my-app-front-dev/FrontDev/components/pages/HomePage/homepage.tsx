@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { Link } from 'react-router-dom'; 
 import './homepage.css';
 
 const Homepage: React.FC = () => {
@@ -33,7 +33,7 @@ const Homepage: React.FC = () => {
                     </button>
                 </Link>
 
-                <Link to="/another-page" className="circle-button-link">
+                <Link to="/team-challenges" className="circle-button-link">
                     <button className="circle-button">
                         Team Challenges
                     </button>
@@ -44,7 +44,6 @@ const Homepage: React.FC = () => {
                         Wellness Resources
                     </button>
                 </Link>
-                {/* Other buttons can be added here similarly */}
             </div>
         </div>
     );
