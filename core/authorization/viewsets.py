@@ -38,14 +38,17 @@ class RegistrationViewSet(ModelViewSet, TokenObtainPairView):
         user = serializer.save()
         refresh = RefreshToken.for_user(user)
 
-        access = refresh.access_token
+        res ={
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+        }
 
 
 
         return Response({
             "user": serializer.data,
-            "refresh": str(refresh),
-            "token": str(access)
+            "refresh": res['refresh'],
+            "token": res['access']
         }, status=status.HTTP_201_CREATED)
 
 
