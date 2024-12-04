@@ -167,5 +167,15 @@ CREATE TABLE habit_streak (
     FOREIGN KEY (habit_id) REFERENCES habit (id) ON DELETE CASCADE
 );
 
--- Creating an index for fast retrieval of habit streaks by habit_id
+CREATE TABLE mood_habit_correlation (
+    id SERIAL PRIMARY KEY,
+    mood_log_id INTEGER NOT NULL,
+    habit_id INTEGER NOT NULL,
+    correlation_score FLOAT,
+    FOREIGN KEY (mood_log_id) REFERENCES mood_log (id) ON DELETE CASCADE,
+    FOREIGN KEY (habit_id) REFERENCES habit (id) ON DELETE CASCADE
+);
+
 CREATE INDEX idx_habit_streak_habit ON habit_streak (habit_id);
+CREATE INDEX idx_mood_habit_mood_log ON mood_habit_correlation (mood_log_id);
+CREATE INDEX idx_mood_habit_habit ON mood_habit_correlation (habit_id);
