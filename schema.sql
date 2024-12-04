@@ -157,3 +157,15 @@ CREATE TABLE emergency_contacts (
     contact_description TEXT NOT NULL,
     phone_number VARCHAR(20)
 );
+CREATE TABLE habit_streak (
+    id SERIAL PRIMARY KEY,
+    habit_id INTEGER NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE,
+    longest_streak INTEGER DEFAULT 0,
+    current_streak INTEGER DEFAULT 0,
+    FOREIGN KEY (habit_id) REFERENCES habit (id) ON DELETE CASCADE
+);
+
+-- Creating an index for fast retrieval of habit streaks by habit_id
+CREATE INDEX idx_habit_streak_habit ON habit_streak (habit_id);
