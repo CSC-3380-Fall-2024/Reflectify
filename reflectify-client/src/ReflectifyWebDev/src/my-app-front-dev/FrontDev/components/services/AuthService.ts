@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { LoginCredentials, RegisterUser , AuthResponse } from '../types/AuthTypes';
 
-const API_URL = 'http://localhost:8000/api/auth/';
+const API_URL = 'http://localhost:8000/api/auth/login';
 
 export const AuthService = {
     login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
