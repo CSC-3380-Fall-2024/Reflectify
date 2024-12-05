@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 
 class MoodQuestion(models.Model):
     question_text = models.TextField()
@@ -11,19 +11,19 @@ class MoodQuestion(models.Model):
 
 
 class MoodResponse(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="mood_responses")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="mood_responses")
     question = models.ForeignKey(MoodQuestion, on_delete=models.CASCADE, related_name="responses")
     answer = models.PositiveIntegerField()  # User's selected option (e.g., 1-5)
     response_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Response by {self.user.username} to '{self.question}'"
+        return f"Response by {self.user} to '{self.question}'"
 
 
 class MoodLog(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="mood_logs")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="mood_logs")
     score = models.PositiveIntegerField()  # Aggregated score from mood responses
     log_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"MoodLog for {self.user.username} on {self.log_date.date()}: {self.score}"
+        return f"MoodLog for {self.user} on {self.log_date.date()}: {self.score}"
