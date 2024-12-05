@@ -17,6 +17,8 @@ const Login: React.FC<{ onLoginSuccess: () => void }> = ({ onLoginSuccess }) => 
                     username,
                     password,
                 };
+                
+                console.log('Logging in with credentials:', credentials);
         
                 try {
                     const response: AuthResponse = await AuthService.login(credentials);
