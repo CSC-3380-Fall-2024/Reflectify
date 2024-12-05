@@ -176,6 +176,15 @@ CREATE TABLE mood_habit_correlation (
     FOREIGN KEY (habit_id) REFERENCES habit (id) ON DELETE CASCADE
 );
 
+CREATE TABLE emergency_contact_log (
+    log_id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    contact_id INTEGER NOT NULL,
+    accessed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (contact_id) REFERENCES emergency_contacts(contact_id) ON DELETE CASCADE
+);
+
 CREATE INDEX idx_habit_streak_habit ON habit_streak (habit_id);
 CREATE INDEX idx_mood_habit_mood_log ON mood_habit_correlation (mood_log_id);
 CREATE INDEX idx_mood_habit_habit ON mood_habit_correlation (habit_id);
