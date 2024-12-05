@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom'; 
 
 const Register: React.FC = () => {
     const [username, setUsername] = useState('');
@@ -72,7 +73,11 @@ const Register: React.FC = () => {
                 <button type="submit">Register</button>
             </form>
             {error && <p style={{ color: 'red' }}>{error}</p>}
-            {success && <p style={{ color: 'green' }}>{success}</p>}
+            {success && (
+                <p style={{ color: 'green' }}>
+                    {success} <Link to="/logpage">Login Now</Link>
+                </p>
+            )}
         </div>
     );
 };
