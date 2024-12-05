@@ -157,6 +157,7 @@ CREATE TABLE emergency_contacts (
     contact_description TEXT NOT NULL,
     phone_number VARCHAR(20)
 );
+
 CREATE TABLE habit_streak (
     id SERIAL PRIMARY KEY,
     habit_id INTEGER NOT NULL,
@@ -188,3 +189,7 @@ CREATE TABLE emergency_contact_log (
 CREATE INDEX idx_habit_streak_habit ON habit_streak (habit_id);
 CREATE INDEX idx_mood_habit_mood_log ON mood_habit_correlation (mood_log_id);
 CREATE INDEX idx_mood_habit_habit ON mood_habit_correlation (habit_id);
+CREATE INDEX idx_journal_entries_user ON journal_entries (user_id);
+CREATE INDEX idx_friends_user ON friends (user_id);
+CREATE INDEX idx_user_challenges_user ON user_challenges (user_id);
+CREATE INDEX idx_forum_posts_user ON forum_posts (user_id);
