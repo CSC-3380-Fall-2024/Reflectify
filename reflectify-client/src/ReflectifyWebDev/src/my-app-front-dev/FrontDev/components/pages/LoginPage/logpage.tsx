@@ -2,19 +2,19 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import {AuthService} from '../../services/AuthService';
 import {LoginCredentials, AuthResponse} from '../../types/AuthTypes';
-
-//create Account Button that links to database
+import { useNavigate } from 'react-router-dom';
 
 const Login: React.FC<{ onLoginSuccess: () => void }> = ({ onLoginSuccess }) => {
-    const [email, setEmail] = useState<string>('');
+    const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string>('');
+    const navigate = useNavigate();
 
     const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
                 event.preventDefault();
                 
                 const credentials: LoginCredentials = {
-                    email,
+                    username,
                     password,
                 };
         
@@ -37,6 +37,9 @@ const Login: React.FC<{ onLoginSuccess: () => void }> = ({ onLoginSuccess }) => 
                      }
                 }
            };
+            const handleRegister = () => {
+                  navigate('/register');
+               };
 
     return (
         <div className="login-container">
@@ -44,9 +47,9 @@ const Login: React.FC<{ onLoginSuccess: () => void }> = ({ onLoginSuccess }) => 
                 <div>
                     <input
                         type="text"
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                         className="input-field"
                         required
                     />
@@ -64,6 +67,7 @@ const Login: React.FC<{ onLoginSuccess: () => void }> = ({ onLoginSuccess }) => 
                 {error && <div className="error-message">{error}</div>}
                 <button type="submit" className="login-button">Login</button>
             </form>
+            <button onClick={handleRegister} className="register-button">Register</button>
         </div>
     );
 };
