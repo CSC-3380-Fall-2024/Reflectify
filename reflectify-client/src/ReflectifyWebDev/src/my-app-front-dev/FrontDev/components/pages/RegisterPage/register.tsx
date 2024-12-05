@@ -14,7 +14,7 @@ const Register: React.FC = () => {
         setSuccess(null);
 
         try {
-            const response = await axios.post('http://your-api-url/api/register/', {
+            const response = await axios.post('http://localhost:8000/api/auth/register/', {
                 username,
                 email,
                 password,
@@ -37,7 +37,7 @@ const Register: React.FC = () => {
 
     return (
         <div>
-            <h2>Register</h2>
+            <h2>Register Your Account Now</h2>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="username">Username:</label>
