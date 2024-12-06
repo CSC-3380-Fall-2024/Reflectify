@@ -39,7 +39,7 @@ Reflectify is a mental health app designed to help college students manage their
     - Crisis Hotline
     - Medical Emergency
     - National Maternal Mental Health Hotline
-    - Substance Abus and Mental Health Services Administration's National Helpline
+    - Substance Abuse and Mental Health Services Administration's National Helpline
 
 
 
