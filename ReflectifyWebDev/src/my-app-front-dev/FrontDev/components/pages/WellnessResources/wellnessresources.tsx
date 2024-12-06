@@ -1,4 +1,5 @@
 import React from 'react';
+import './MentalHealthResources.css'
 
 interface Resource {
   title: string;
@@ -36,21 +37,26 @@ const resources: Resource[] = [
 
 const MentalHealthResources: React.FC = () => {
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>Mental Health Wellness Resources</h1>
-      <p>Here are some helpful resources for mental health support and wellness:</p>
-      <ul style={{ listStyleType: 'none', padding: 0 }}>
-        {resources.map((resource, index) => (
-          <li key={index} style={{ marginBottom: '20px', borderBottom: '1px solid #ccc', paddingBottom: '10px' }}>
-            <h2 style={{ fontSize: '1.2em', margin: 0 }}>{resource.title}</h2>
-            <p style={{ margin: '5px 0' }}>{resource.description}</p>
-            <a href={resource.link} target="_blank" rel="noopener noreferrer" style={{ color: '#007bff' }}>
-              Visit Website
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
+      <div className="container">
+          <h1>Mental Health Wellness Resources</h1>
+          <p>Here are some helpful resources for mental health support and wellness:</p>
+          <ul className="resource-list">
+              {resources.map((resource, index) => (
+                  <li key={index} className="resource-item">
+                      <h2 className="resource-title">{resource.title}</h2>
+                      <p className="resource-description">{resource.description}</p>
+                      <a
+                          href={resource.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="resource-link"
+                      >
+                          Visit Website
+                      </a>
+                  </li>
+              ))}
+          </ul>
+      </div>
   );
 };
 

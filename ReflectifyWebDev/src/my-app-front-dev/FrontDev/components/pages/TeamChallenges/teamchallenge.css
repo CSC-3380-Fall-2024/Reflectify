@@ -1,0 +1,65 @@
+.team-challenges-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.trophy-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    position: relative;
+}
+
+.trophy-icon {
+    font-size: 50px;
+    color: gold;
+}
+
+.challenge-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.challenge-description {
+    font-size: 1rem;
+    margin: 10px 0;
+}
+
+.challenges-grid {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.leaderboard, .recap {
+    width: 45%;
+    background-color: #e3f2fd;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.leaderboard-title, .recap-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.leaderboard-list, .recap-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.leaderboard-item, .recap-item {
+    margin: 5px 0;
+}
