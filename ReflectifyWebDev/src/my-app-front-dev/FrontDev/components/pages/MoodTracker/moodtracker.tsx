@@ -36,18 +36,27 @@ const MoodTracker: React.FC = () => {
     };
 
     return (
-        <div>
+        <div className="mood-tracker">
             {result ? (
-                <div>
-                    <h2>Your mood is: {result.mood}</h2>
-                    <p>Score: {result.score}</p>
+                <div className="result-container">
+                    <h2>Your Mood</h2>
+                    <p className="result-info">
+                        Mood: <span>{result.mood}</span>
+                    </p>
+                    <p className="result-info">
+                        Score: <span>{result.score}</span>
+                    </p>
                 </div>
             ) : (
-                <div>
+                <div className="question-container">
                     <h2>{questions[currentQuestionIndex].text}</h2>
-                    <div>
+                    <div className="button-group">
                         {[1, 2, 3, 4, 5].map((score) => (
-                            <button key={score} onClick={() => handleAnswerClick(score)}>
+                            <button
+                                key={score}
+                                className="answer-button"
+                                onClick={() => handleAnswerClick(score)}
+                            >
                                 {score}
                             </button>
                         ))}

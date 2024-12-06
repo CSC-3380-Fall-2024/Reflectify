@@ -6,7 +6,7 @@ const PersonalJournal: React.FC = () => {
   const [entry, setEntry] = useState<string>('');
   const [entries, setEntries] = useState<{ id: number; content: string }[]>([]); // Backend will assign IDs
 
-// Fetch entries from backend when component loads
+
   useEffect(() => {
     const fetchEntries = async () => {
       try {
@@ -52,7 +52,7 @@ const PersonalJournal: React.FC = () => {
         className="text-area"
         value={entry}
         onChange={handleChange}
-        placeholder="What are you feeling today? Write your expressions here..."
+        placeholder="How are you feeling today? Write your expressions here..."
         />
       <button className="button" onClick={handleSave}> 
         Save Entry
