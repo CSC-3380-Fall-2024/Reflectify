@@ -33,98 +33,149 @@ CREATE TABLE users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+CREATE TABLE mood_questions (
+    question_id INT AUTO_INCREMENT PRIMARY KEY,
+    question_text VARCHAR(255) NOT NULL,
+    options JSON NOT NULL,
+    category VARCHAR(50)
+);
+
+CREATE TABLE mood_responses (
+    response_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    question_id INT,
+    answer VARCHAR(50),
+    response_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (question_id) REFERENCES mood_questions(question_id) ON DELETE CASCADE
+);
+
+CREATE TABLE mood_logs (
+    log_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    score FLOAT,
+    log_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
 CREATE TABLE journal_entries (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
+    entry_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
     title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES auth_user (id) ON DELETE CASCADE
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE habits (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
+    habit_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
     habit_name VARCHAR(100) NOT NULL,
-    start_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES auth_user (id) ON DELETE CASCADE
+    description TEXT,
+    goal_count INT DEFAULT 1,
+    unit VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
-CREATE TABLE habit_log (
-    id SERIAL PRIMARY KEY,
-    habit_id INTEGER NOT NULL,
-    log_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status BOOLEAN NOT NULL DEFAULT TRUE,
-    FOREIGN KEY (habit_id) REFERENCES habits (id) ON DELETE CASCADE
+CREATE TABLE habit_logs (
+    log_id INT AUTO_INCREMENT PRIMARY KEY,
+    habit_id INT,
+    user_id INT,
+    completed_on DATE NOT NULL,
+    streak INT DEFAULT 0,
+    FOREIGN KEY (habit_id) REFERENCES habits(habit_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE friends (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
-    friend_id INTEGER NOT NULL,
-    status VARCHAR(20) DEFAULT 'pending',
+    friend_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    friend_user_id INT,
+    status ENUM('requested', 'accepted', 'blocked') DEFAULT 'requested',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES auth_user (id) ON DELETE CASCADE,
-    FOREIGN KEY (friend_id) REFERENCES auth_user (id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (friend_user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE community_challenges (
-    id SERIAL PRIMARY KEY,
+    challenge_id INT AUTO_INCREMENT PRIMARY KEY,
     challenge_name VARCHAR(100) NOT NULL,
-    description TEXT,
-    start_date TIMESTAMP,
-    end_date TIMESTAMP
+    description TEXT NOT NULL,
+    created_by INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (created_by) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE user_challenges (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
-    challenge_id INTEGER NOT NULL,
-    progress INTEGER DEFAULT 0,
-    FOREIGN KEY (user_id) REFERENCES auth_user (id) ON DELETE CASCADE,
-    FOREIGN KEY (challenge_id) REFERENCES community_challenges (id) ON DELETE CASCADE
+    user_challenge_id INT AUTO_INCREMENT PRIMARY KEY,
+    challenge_id INT,
+    user_id INT,
+    status ENUM('ongoing', 'completed', 'failed') DEFAULT 'ongoing',
+    start_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (challenge_id) REFERENCES community_challenges(challenge_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE wellness_resources (
-    id SERIAL PRIMARY KEY,
-    resource_type VARCHAR(50) NOT NULL,
-    title VARCHAR(255) NOT NULL,
-    content TEXT,
-    url VARCHAR(2083),
+    resource_id INT AUTO_INCREMENT PRIMARY KEY,
+    resource_title VARCHAR(150) NOT NULL,
+    resource_type ENUM('article', 'guide', 'program') NOT NULL,
+    content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE expert_contacts (
-    id SERIAL PRIMARY KEY,
+    contact_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    expertise VARCHAR(100),
-    contact_info VARCHAR(255)
+    expertise VARCHAR(100) NOT NULL,
+    email VARCHAR(100),
+    phone VARCHAR(20)
 );
 
-CREATE TABLE emergency_contacts (
-    id SERIAL PRIMARY KEY,
-    contact_name VARCHAR(100) NOT NULL,
-    contact_type VARCHAR(50) NOT NULL,
-    contact_info VARCHAR(255) NOT NULL,
-    description TEXT
-);
-
-CREATE TABLE self_care_prompts (
-    id SERIAL PRIMARY KEY,
-    prompt_text VARCHAR(255) NOT NULL,
+CREATE TABLE community_forums (
+    forum_id INT AUTO_INCREMENT PRIMARY KEY,
+    forum_name VARCHAR(100) NOT NULL,
+    description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE user_preferences (
-    user_id INTEGER PRIMARY KEY,
-    theme ENUM('light', 'dark') DEFAULT 'light',
-    receive_notifications BOOLEAN DEFAULT TRUE,
-    FOREIGN KEY (user_id) REFERENCES auth_user (id) ON DELETE CASCADE
+CREATE TABLE forum_posts (
+    post_id INT AUTO_INCREMENT PRIMARY KEY,
+    forum_id INT,
+    user_id INT,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (forum_id) REFERENCES community_forums(forum_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
-CREATE INDEX idx_mood_question_category ON mood_question (category);
-CREATE INDEX idx_mood_response_user ON mood_response (user_id);
-CREATE INDEX idx_mood_response_question ON mood_response (question_id);
-CREATE INDEX idx_mood_log_user ON mood_log (user_id);
-CREATE INDEX idx_mood_log_log_date ON mood_log (log_date);
+CREATE TABLE emergency_contacts (
+    contact_id INT AUTO_INCREMENT PRIMARY KEY,
+    contact_name VARCHAR(100) NOT NULL,
+    contact_description TEXT NOT NULL,
+    phone_number VARCHAR(20)
+);
+CREATE TABLE habit_streak (
+    id SERIAL PRIMARY KEY,
+    habit_id INTEGER NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE,
+    longest_streak INTEGER DEFAULT 0,
+    current_streak INTEGER DEFAULT 0,
+    FOREIGN KEY (habit_id) REFERENCES habit (id) ON DELETE CASCADE
+);
+
+CREATE TABLE mood_habit_correlation (
+    id SERIAL PRIMARY KEY,
+    mood_log_id INTEGER NOT NULL,
+    habit_id INTEGER NOT NULL,
+    correlation_score FLOAT,
+    FOREIGN KEY (mood_log_id) REFERENCES mood_log (id) ON DELETE CASCADE,
+    FOREIGN KEY (habit_id) REFERENCES habit (id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_habit_streak_habit ON habit_streak (habit_id);
+CREATE INDEX idx_mood_habit_mood_log ON mood_habit_correlation (mood_log_id);
+CREATE INDEX idx_mood_habit_habit ON mood_habit_correlation (habit_id);
