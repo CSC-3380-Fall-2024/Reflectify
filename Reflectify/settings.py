@@ -87,8 +87,12 @@ WSGI_APPLICATION = 'Reflectify.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'reflectify_db',         # Name of the database
+        'USER': 'root',       # MySQL user
+        'PASSWORD': 'Williams12',     # Password for that user
+        'HOST': 'localhost',             # Host (use 'localhost' for local MySQL setup)
+        'PORT': '3306',                  # Port (3306 is the default MySQL port)
     }
 }
 
