@@ -1,5 +1,5 @@
 import React from 'react';
-import './MentalHealthResources.css'
+import './wellnessresources.css'
 
 interface Resource {
   title: string;

@@ -1,19 +1,47 @@
 import React, { useState } from 'react';
-//import ReflectifyLogo from './my-app-front-dev/FrontDev//components/assets/ReflectifyLogo.png'; 
-const Login: React.FC<{ onLoginSuccess: () => void }> = ({ onLoginSuccess }) => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+import axios from 'axios';
+import {AuthService} from '../../services/AuthService';
+import {LoginCredentials, AuthResponse} from '../../types/AuthTypes';
+import { useNavigate } from 'react-router-dom';
 
-    const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+const Login: React.FC<{ onLoginSuccess: () => void }> = ({ onLoginSuccess }) => {
+    const [username, setUsername] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [error, setError] = useState<string>('');
+    const navigate = useNavigate();
+
+    const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+                event.preventDefault();
+                
+                const credentials: LoginCredentials = {
+                    username,
+                    password,
+                };
+                
+                console.log('Logging in with credentials:', credentials);
         
-        if (username === 'user' && password === 'password') {
-            onLoginSuccess(); // Call the success function passed as a prop
-        } else {
-            setError('Incorrect credentials. Please try again.');
-        }
-    };
+                try {
+                    const response: AuthResponse = await AuthService.login(credentials);
+                    // Assuming response is successful 
+                    if (response.access) { 
+                        // Check access token & Store it & Handle successful login
+                        // Store Refresh Token 
+                        onLoginSuccess();
+                    } else {
+                        setError('Login failed. Please check your credentials.');
+                    }
+                    } catch (err) {
+                  // Handle error from API
+                      if (axios.isAxiosError(err) && err.response) {
+                          setError(err.response.data.detail || 'An error occurred. Please try again.');
+                        } else {
+                        setError('An error occurred. Please try again.');
+                     }
+                }
+           };
+            const handleRegister = () => {
+                  navigate('/register');
+               };
 
     return (
         <div className="login-container">
@@ -25,6 +53,7 @@ const Login: React.FC<{ onLoginSuccess: () => void }> = ({ onLoginSuccess }) => 
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         className="input-field"
+                        required
                     />
                 </div>
                 <div>
@@ -34,11 +63,13 @@ const Login: React.FC<{ onLoginSuccess: () => void }> = ({ onLoginSuccess }) => 
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="input-field"
+                        required
                     />
                 </div>
                 {error && <div className="error-message">{error}</div>}
                 <button type="submit" className="login-button">Login</button>
             </form>
+            <button onClick={handleRegister} className="register-button">Register</button>
         </div>
     );
 };
