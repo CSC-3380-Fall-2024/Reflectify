@@ -57,6 +57,10 @@ CREATE TABLE mood_logs (
     log_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
+SELECT * FROM mood_logs WHERE score < 0 OR score > 10;
+DELETE FROM mood_logs WHERE score < 0 OR score > 10;
+ALTER TABLE mood_logs
+ADD CONSTRAINT check_mood_score CHECK (score >= 0 AND score <= 10);
 
 CREATE TABLE journal_entries (
     entry_id INT AUTO_INCREMENT PRIMARY KEY,
