@@ -13,11 +13,10 @@ export interface AuthResponse{
     user: {
         id: number;
         username: string;
-        email: string;
         password: string;
     }
     access: string;
-    refresh: string;
+    refresh?: string;
     }
 
 

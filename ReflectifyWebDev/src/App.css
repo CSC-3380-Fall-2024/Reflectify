@@ -9,17 +9,28 @@
 
 .App-header {
   background-color: white;
-  min-height: 100vh;
+  min-height: 500px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: black;
+  padding: 10px;
+  height: 60px;
 }
 
 .App-link {
   color: #61dafb;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: calc(100vh - 60px);
+  padding: 20px;
 }
 
 
