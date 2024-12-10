@@ -1,9 +1,9 @@
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 from rest_framework.permissions import AllowAny
-from rest_framework import status, serializers
+from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from rest_framework_simplejwt.views import TokenRefreshView
 from core.authorization.serializers import LoginSerializer, RegisterSerializer
 
@@ -13,18 +13,18 @@ class LoginViewSet(ViewSet):
     permission_classes = (AllowAny,)
 
     def create(self, request, *args, **kwargs):
-        print("Request Data:", request.data)  
         serializer = self.serializer_class(data=request.data)
 
         try:
             serializer.is_valid(raise_exception=True)
-            print("Validated Data:", serializer.validated_data)  
-            return Response(serializer.validated_data, status=status.HTTP_200_OK)
-        except serializers.ValidationError as e:  
-            print("Validation Errors:", serializer.errors)  
-            return Response({"error": e.detail}, status=status.HTTP_400_BAD_REQUEST)
-        except TokenError as e:  
+        except TokenError as e:
             return Response({"error": str(e)}, status=status.HTTP_401_UNAUTHORIZED)
+
+        return Response({
+            "refresh": serializer.validated_data.get("refresh"),
+            "access": serializer.validated_data.get("access"),
+            "user": serializer.validated_data.get("user"),
+        }, status=status.HTTP_200_OK)
 
 
 class RegistrationViewSet(ViewSet):
@@ -32,7 +32,6 @@ class RegistrationViewSet(ViewSet):
     permission_classes = (AllowAny,)
 
     def create(self, request, *args, **kwargs):
-        print("Request Data:", request.data)  # DEBUG: Log incoming data
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
@@ -49,14 +48,11 @@ class RefreshViewSet(ViewSet):
     permission_classes = (AllowAny,)
 
     def create(self, request, *args, **kwargs):
-        print("Request Data:", request.data)  
-        serializer = TokenRefreshView.get_serializer(data=request.data)  
+        serializer = TokenRefreshView.get_serializer(self, data=request.data)
 
         try:
             serializer.is_valid(raise_exception=True)
-            return Response(serializer.validated_data, status=status.HTTP_200_OK)
-        except serializers.ValidationError as e:  
-            print("Validation Errors:", serializer.errors)  
-            return Response({"error": e.detail}, status=status.HTTP_400_BAD_REQUEST)
-        except TokenError as e: 
+        except TokenError as e:
             return Response({"error": str(e)}, status=status.HTTP_401_UNAUTHORIZED)
+
+        return Response(serializer.validated_data, status=status.HTTP_200_OK)
