@@ -55,4 +55,32 @@ Reflectify is built with the unique pressures of college life in mind. Between a
 - Backend: Python Django
 - Database: MySQL
   
+---
 
+## Run Instructions:
+1. Clone Repository 
+2. Set Up Virtual Environment 
+- python -m venv {environmentname}
+#windows
+- {environmentname}\Scripts\activate
+#mac
+source {environmentname}/bin/activate
+3. Install npm & MySQL & Django via your choice package manager
+*we found that downloading these separately prevents numerous errors when it comes to installing the other dependencies
+4. Install Dependencies
+- pip install -r requirements.txt
+5. Create and apply migrations
+- python manage.py makemigrations
+- python manage.py migrate 
+6. Run Server
+- python manage.py runserver
+7. Open a second terminal
+8. Navigate to src file - ReflectifyWebDev/src
+9. Run npm
+- npm run
+10. Start Webpage
+- npm start
+11. Register Credentials using email, username, and password 
+12. Use credentials to login
+13. Enjoy the Relfectify App
+---
