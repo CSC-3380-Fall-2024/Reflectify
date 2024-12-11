@@ -6,7 +6,7 @@ class MoodQuestion(models.Model):
     options = models.JSONField()  # Stores possible answers as JSON, e.g., ["1", "2", "3", "4", "5"]
     category = models.CharField(max_length=50)  # Category of the question (e.g., "stress", "happiness")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.category}: {self.question_text[:50]}..."
 
 
@@ -16,7 +16,7 @@ class MoodResponse(models.Model):
     answer = models.PositiveIntegerField()  # User's selected option (e.g., 1-5)
     response_date = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Response by {self.user} to '{self.question}'"
 
 
@@ -25,5 +25,5 @@ class MoodLog(models.Model):
     score = models.PositiveIntegerField()  # Aggregated score from mood responses
     log_date = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"MoodLog for {self.user} on {self.log_date.date()}: {self.score}"

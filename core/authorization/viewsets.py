@@ -1,18 +1,20 @@
+from typing import Any
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 from rest_framework.permissions import AllowAny
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
+from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.views import TokenRefreshView
+from rest_framework.request import Request
 from core.authorization.serializers import LoginSerializer, RegisterSerializer
 
 
 class LoginViewSet(ViewSet):
-    serializer_class = LoginSerializer
-    permission_classes = (AllowAny,)
+    serializer_class: type = LoginSerializer
+    permission_classes: tuple = (AllowAny,)
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         serializer = self.serializer_class(data=request.data)
 
         try:
@@ -28,10 +30,10 @@ class LoginViewSet(ViewSet):
 
 
 class RegistrationViewSet(ViewSet):
-    serializer_class = RegisterSerializer
-    permission_classes = (AllowAny,)
+    serializer_class: type = RegisterSerializer
+    permission_classes: tuple = (AllowAny,)
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
@@ -45,9 +47,9 @@ class RegistrationViewSet(ViewSet):
 
 
 class RefreshViewSet(ViewSet):
-    permission_classes = (AllowAny,)
+    permission_classes: tuple = (AllowAny,)
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         serializer = TokenRefreshView.get_serializer(self, data=request.data)
 
         try:
