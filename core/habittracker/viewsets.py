@@ -8,7 +8,7 @@ class HabitViewSet(viewsets.ModelViewSet):
     serializer_class: Type[HabitSerializer] = HabitSerializer
     permission_classes: list[permissions.BasePermission] = [permissions.IsAuthenticated]
 
-    def get_queryset(self) -> Type[Habit].objects:
+    def get_queryset(self) -> Habit.objects:
         return Habit.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer: HabitSerializer) -> None:
@@ -18,7 +18,7 @@ class HabitLogViewSet(viewsets.ModelViewSet):
     serializer_class: Type[HabitLogSerializer] = HabitLogSerializer
     permission_classes: list[permissions.BasePermission] = [permissions.IsAuthenticated]
 
-    def get_queryset(self) -> Type[HabitLog].objects:
+    def get_queryset(self) -> HabitLog.objects:
         return HabitLog.objects.filter(habit_user=self.request.user)
 
     def perform_create(self, serializer: HabitLogSerializer) -> None:
