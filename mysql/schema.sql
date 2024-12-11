@@ -7,20 +7,18 @@ CREATE TABLE mood_question (
 
 CREATE TABLE mood_response (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
     question_id INTEGER NOT NULL,
     answer VARCHAR(50) NOT NULL,
     response_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES auth_user (id) ON DELETE CASCADE,
+    FOREIGN KEY (id) REFERENCES auth_user (id) ON DELETE CASCADE,
     FOREIGN KEY (question_id) REFERENCES mood_question (id) ON DELETE CASCADE
 );
 
 CREATE TABLE mood_log (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
     score FLOAT NOT NULL,
     log_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES auth_user (id) ON DELETE CASCADE
+    FOREIGN KEY (id) REFERENCES auth_user (id) ON DELETE CASCADE
 );
 
 CREATE TABLE users (
@@ -42,61 +40,61 @@ CREATE TABLE mood_questions (
 
 CREATE TABLE mood_responses (
     response_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
+    id INT,
     question_id INT,
     answer VARCHAR(50),
     response_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (question_id) REFERENCES mood_questions(question_id) ON DELETE CASCADE
 );
 
 CREATE TABLE mood_logs (
     log_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
+    id INT,
     score FLOAT,
     log_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+    FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE journal_entries (
     entry_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
+    id INT,
     title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+    FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE habits (
     habit_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
+    id INT,
     habit_name VARCHAR(100) NOT NULL,
     description TEXT,
     goal_count INT DEFAULT 1,
     unit VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+    FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE habit_logs (
     log_id INT AUTO_INCREMENT PRIMARY KEY,
     habit_id INT,
-    user_id INT,
+    id INT,
     completed_on DATE NOT NULL,
     streak INT DEFAULT 0,
     FOREIGN KEY (habit_id) REFERENCES habits(habit_id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+    FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE friends (
     friend_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
+    id INT,
     friend_user_id INT,
     status ENUM('requested', 'accepted', 'blocked') DEFAULT 'requested',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
-    FOREIGN KEY (friend_user_id) REFERENCES users(user_id) ON DELETE CASCADE
+    FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (friend_user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE community_challenges (
@@ -105,17 +103,17 @@ CREATE TABLE community_challenges (
     description TEXT NOT NULL,
     created_by INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (created_by) REFERENCES users(user_id) ON DELETE CASCADE
+    FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE user_challenges (
     user_challenge_id INT AUTO_INCREMENT PRIMARY KEY,
     challenge_id INT,
-    user_id INT,
+    id INT,
     status ENUM('ongoing', 'completed', 'failed') DEFAULT 'ongoing',
     start_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (challenge_id) REFERENCES community_challenges(challenge_id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+    FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE wellness_resources (
@@ -144,11 +142,11 @@ CREATE TABLE community_forums (
 CREATE TABLE forum_posts (
     post_id INT AUTO_INCREMENT PRIMARY KEY,
     forum_id INT,
-    user_id INT,
+    id INT,
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (forum_id) REFERENCES community_forums(forum_id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+    FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE emergency_contacts (
@@ -179,17 +177,17 @@ CREATE TABLE mood_habit_correlation (
 
 CREATE TABLE emergency_contact_log (
     log_id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
+    id INTEGER NOT NULL,
     contact_id INTEGER NOT NULL,
     accessed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (contact_id) REFERENCES emergency_contacts(contact_id) ON DELETE CASCADE
 );
 
 CREATE INDEX idx_habit_streak_habit ON habit_streak (habit_id);
 CREATE INDEX idx_mood_habit_mood_log ON mood_habit_correlation (mood_log_id);
 CREATE INDEX idx_mood_habit_habit ON mood_habit_correlation (habit_id);
-CREATE INDEX idx_journal_entries_user ON journal_entries (user_id);
-CREATE INDEX idx_friends_user ON friends (user_id);
-CREATE INDEX idx_user_challenges_user ON user_challenges (user_id);
-CREATE INDEX idx_forum_posts_user ON forum_posts (user_id);
+CREATE INDEX idx_journal_entries_user ON journal_entries (id);
+CREATE INDEX idx_friends_user ON friends (id);
+CREATE INDEX idx_user_challenges_user ON user_challenges (id);
+CREATE INDEX idx_forum_posts_user ON forum_posts (id);

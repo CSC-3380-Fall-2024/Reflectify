@@ -4,6 +4,48 @@ import { AuthService } from '../../services/AuthService';
 import { LoginCredentials, AuthResponse } from '../../types/AuthTypes';
 import { useNavigate } from 'react-router-dom';
 
+const api = axios.create({
+    baseURL: 'http://127.0.0.1:8000/api/',
+});
+
+// Axios Request Interceptor for Authorization
+api.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('accessToken');
+        if (token) {
+            config.headers['Authorization'] = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
+
+// Axios Response Interceptor for Token Refresh
+api.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+        const originalRequest = error.config;
+        if (error.response?.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
+            const refreshToken = localStorage.getItem('refreshToken');
+            try {
+                const { data } = await api.post('/auth/token/refresh/', {
+                    refresh: refreshToken,
+                });
+                localStorage.setItem('accessToken', data.access);
+                originalRequest.headers['Authorization'] = `Bearer ${data.access}`;
+                return api(originalRequest); // Retry the original request
+            } catch (refreshError) {
+                console.error('Refresh token failed', refreshError);
+                // Handle logout or redirect to login
+                localStorage.clear();
+                window.location.href = '/login';
+            }
+        }
+        return Promise.reject(error);
+    }
+);
+
 const Login: React.FC<{ onLoginSuccess: () => void }> = ({ onLoginSuccess }) => {
     const [identifier, setIdentifier] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -14,29 +56,25 @@ const Login: React.FC<{ onLoginSuccess: () => void }> = ({ onLoginSuccess }) => 
         event.preventDefault();
 
         const credentials: LoginCredentials = {
-            username: identifier, 
+            username: identifier,
             password,
         };
 
-        console.log('Logging in with credentials:', credentials);
-
         try {
             const response: AuthResponse = await AuthService.login(credentials);
-            if (response.access) { 
-                localStorage.setItem('accessToken', response.access); 
+            if (response.access) {
+                localStorage.setItem('accessToken', response.access);
                 if (response.refresh) {
                     localStorage.setItem('refreshToken', response.refresh);
                 }
-                onLoginSuccess(); 
+                onLoginSuccess();
             } else {
                 setError('Login failed. Please check your credentials.');
             }
         } catch (err) {
             if (axios.isAxiosError(err) && err.response) {
-                console.error("Axios error: ", err.response);
                 setError(err.response.data.detail || 'An error occurred. Please try again.');
             } else {
-                console.error('Error: ', err);
                 setError('An error occurred. Please try again.');
             }
         }
@@ -70,9 +108,13 @@ const Login: React.FC<{ onLoginSuccess: () => void }> = ({ onLoginSuccess }) => 
                     />
                 </div>
                 {error && <div className="error-message">{error}</div>}
-                <button type="submit" className="login-button">Login</button>
+                <button type="submit" className="login-button">
+                    Login
+                </button>
             </form>
-            <button onClick={handleRegister} className="register-button">Register</button>
+            <button onClick={handleRegister} className="register-button">
+                Register
+            </button>
         </div>
     );
 };

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -24,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-dit(*#(i-pkeq$j)^xj2_r-!m#yv+nxc*v3f)xy&2^i%zjd1m-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '0.0.0.0', '127.0.0.1', '::1']
 
@@ -87,10 +88,15 @@ WSGI_APPLICATION = 'Reflectify.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'reflectify_db',         # Name of the database
+        'USER': 'root',       # MySQL user
+        'PASSWORD': 'Williams12',     # Password for that user
+        'HOST': 'localhost',             # Host (use 'localhost' for local MySQL setup)
+        'PORT': '3306', 
     }
 }
+
 
 
 # Password validation
@@ -139,10 +145,20 @@ AUTH_USER_MODEL = 'core_account.User'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication'
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
     )
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes = 180),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days = 1),
 }
 
 CORS_ALLOWED_ORIGINS = [
