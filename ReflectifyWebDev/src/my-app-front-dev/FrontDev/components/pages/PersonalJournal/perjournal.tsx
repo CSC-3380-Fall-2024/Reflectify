@@ -1,99 +1,156 @@
 import React, { useState, useEffect } from 'react';
 import './perjournal.css';
-import { JournalService } from '../../services/JournalService'; 
-import { JournalEntry } from '../../types/JournalTypes'; 
+import { JournalEntry } from '../../types/JournalTypes';
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: 'http://127.0.0.1:8000/api/', 
+});
+
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      const refreshToken = localStorage.getItem('refreshToken');
+      if (refreshToken) {
+        try {
+          const { data } = await api.post('/auth/token/refresh/', { refresh: refreshToken });
+          localStorage.setItem('accessToken', data.access);
+          originalRequest.headers['Authorization'] = `Bearer ${data.access}`;
+          return api(originalRequest);
+        } catch (refreshError) {
+          console.error('Refresh token failed', refreshError);
+          localStorage.clear();
+          window.location.href = '/login';
+        }
+      }
+    }
+    return Promise.reject(error);
+  }
+);
 
 const PersonalJournal: React.FC = () => {
-  const [title, setTitle] = useState<string>('');
   const [entry, setEntry] = useState<string>('');
-  const [entries, setEntries] = useState<JournalEntry[]>([]); 
-  const [error,setError] = useState<string | null>(null);
-
-  const userID = Number(localStorage.getItem('userId'));
+  const [entries, setEntries] = useState<JournalEntry[]>([]);
 
   useEffect(() => {
-  const fetchEntries = async () => {
-    try {
-      const fetchedEntries = await JournalService.getAllEntries(userID); 
-      setEntries(fetchedEntries); 
-    } 
-    catch (error) {
-      console.error('Error fetching entries:', error);
-      setError('Failed to fetch entries. Please try again later.');
+    const fetchEntries = async () => {
+      try {
+        const response = await api.get<JournalEntry[]>('/journal/');
+        setEntries(response.data);
+      } catch (error) {
+        console.error('Error fetching entries:', error);
+      }
+
+      const localEntries = localStorage.getItem('localJournalEntries');
+      if (localEntries) {
+        setEntries((prevEntries) => [...prevEntries, ...JSON.parse(localEntries)]);
       }
     };
 
     fetchEntries();
-  }, [userID]);
+  }, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-   setEntry(event.target.value);
+    setEntry(event.target.value);
   };
 
-  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setTitle(event.target.value); 
-    };
-
   const handleSave = async () => {
-   if (entry.trim()) {
-    try {
-          const newEntry = await JournalService.createEntry({ user: userID, title, content: entry }); 
-        console.log('New Entry:', newEntry);
-        setEntries([...entries, newEntry]); 
-        setEntry(''); 
-        setTitle('');
-        setError(null);
+    if (entry.trim()) {
+      try {
+        const response = await api.post<JournalEntry>('/journal/', { content: entry });
+        const newEntry = response.data;
+  
+        console.log('Response from server:', newEntry);
+  
+        
+        if (newEntry.id && newEntry.content) {
+          setEntries((prevEntries) => [...prevEntries, newEntry]);
+          setEntry('');
+  
+          const localEntries = localStorage.getItem('localJournalEntries');
+          const updatedLocalEntries = localEntries ? [...JSON.parse(localEntries), newEntry] : [newEntry];
+          localStorage.setItem('localJournalEntries', JSON.stringify(updatedLocalEntries));
+  
+          console.log('Updated local entries:', updatedLocalEntries);
+        } else {
+          console.error('Incomplete entry data received from server:', newEntry);
+        }
       } catch (error) {
-        console.error('Error saving entry:', error);
-        setError('Failed to save entry. Please try again');
+        console.error('Error saving entry to server:', error);
+  
+        const localEntries = localStorage.getItem('localJournalEntries');
+        const newLocalEntry: JournalEntry = {
+          id: Date.now(), 
+          content: entry,
+          title: '', 
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+  
+        setEntries((prevEntries) => [...prevEntries, newLocalEntry]);
+        setEntry('');
+  
+        const updatedLocalEntries = localEntries ? [...JSON.parse(localEntries), newLocalEntry] : [newLocalEntry];
+        localStorage.setItem('localJournalEntries', JSON.stringify(updatedLocalEntries));
+  
+        console.log('Saved entry locally:', newLocalEntry);
       }
-    }
-    else{
-      setError('Title & content cannot be empty');
     }
   };
 
   const handleDelete = async (id: number) => {
     try {
-      await JournalService.deleteEntry(id); 
-      setEntries(entries.filter(entry => entry.id !== id)); 
+      await api.delete(`/journal/${id}/`);
+      setEntries(entries.filter((entry) => entry.id !== id));
+
+      const localEntries = localStorage.getItem('localJournalEntries');
+      if (localEntries) {
+        const updatedLocalEntries = JSON.parse(localEntries).filter((entry: JournalEntry) => entry.id !== id);
+        localStorage.setItem('localJournalEntries', JSON.stringify(updatedLocalEntries));
+      }
     } catch (error) {
       console.error('Error deleting entry:', error);
-      setError('Failed to delete entry. Please try again');
     }
   };
 
   return (
-    <div className="container"> 
-    <h1>Personal Journal</h1>
-     {error && <p className="error-message">{error}</p>}
-     <input
-       type="text"
-        className="title-input"
-        value={title}
-        onChange={handleTitleChange}
-        placeholder="Title of your entry"
-      />
-        <textarea
+    <div className="container">
+      <h1>Personal Journal</h1>
+      <textarea
         className="text-area"
         value={entry}
         onChange={handleChange}
         placeholder="What are you feeling today? Write your expressions here..."
       />
-      <button className="button" onClick={handleSave}> 
+      <button className="button" onClick={handleSave}>
         Save Entry
       </button>
-      <div className="entries-container"> 
+      <div className="entries-container">
         <h2>Your Entries:</h2>
         {entries.length === 0 ? (
-        <p>No entries yet.</p>
-      ) : (
-        entries.map((entry) => (
-          <div key={entry.id} className="entry"> 
-          <h3>{entry.title}</h3>
-            <p>{entry.content}</p>
-              <button className="delete-button" onClick={() => handleDelete(entry.id)}>Delete</button>
-          </div>
+          <p>No entries yet.</p>
+        ) : (
+          entries.map((entry) => (
+            <div key={entry.id} className="entry">
+              <p>{entry.content}</p>
+              <button className="delete-button" onClick={() => handleDelete(entry.id)}>
+                Delete
+              </button>
+            </div>
           ))
         )}
       </div>
