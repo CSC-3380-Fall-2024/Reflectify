@@ -1,53 +1,34 @@
 import React from 'react';
-import { FaTrophy } from 'react-icons/fa';
 import './teamchallenge.css';
 
-interface Friend {
-  id: string;
-  name: string;
-  progress: number; 
-}
+const TeamChallenge: React.FC = () => {
+  const email = localStorage.getItem('email') || 'No email found';
 
-interface TeamChallengesProps {
-  friends: Friend[];
-  weeklyChallenge: string;
-  previousWeeksRecap: string[];
-}
+  const workoutSchedule = [
+    { day: 'Monday', workout: '100 Push-ups, 50 Sit-ups, 75 Jumping Jacks' },
+    { day: 'Tuesday', workout: '100 Push-ups, 50 Sit-ups, 75 Jumping Jacks' },
+    { day: 'Wednesday', workout: '100 Push-ups, 50 Sit-ups, 75 Jumping Jacks' },
+    { day: 'Thursday', workout: '100 Push-ups, 50 Sit-ups, 75 Jumping Jacks' },
+    { day: 'Friday', workout: '100 Push-ups, 50 Sit-ups, 75 Jumping Jacks' },
+    { day: 'Saturday', workout: 'Rest Day' },
+    { day: 'Sunday', workout: 'Rest Day' },
+  ];
 
-const TeamChallenges: React.FC<TeamChallengesProps> = ({ friends, weeklyChallenge, previousWeeksRecap }) => {
   return (
-    <div className="team-challenges-container">
-      <div className="trophy-circle">
-        <FaTrophy className="trophy-icon" />
+    <div className="team-challenge">
+      <div className="circle">
+        <span className="email">{email}</span>
       </div>
-      <h2 className="challenge-title">This Week's Challenge</h2>
-      <p className="challenge-description">{weeklyChallenge}</p>
-
-      <div className="challenges-grid">
-        <div className="leaderboard">
-          <h3 className="leaderboard-title">Leaderboard</h3>
-          <ul className="leaderboard-list">
-            {friends.map(friend => (
-              <li key={friend.id} className="leaderboard-item">
-                {friend.name}: {friend.progress}%
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="recap">
-          <h3 className="recap-title">Previous Weeks' Recap</h3>
-          <ul className="recap-list">
-            {previousWeeksRecap.map((recap, index) => (
-              <li key={index} className="recap-item">
-                {recap}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+      <h2> This Week Challenge: Weekly Workout </h2>
+      <ul className="workout-schedule">
+        {workoutSchedule.map((entry, index) => (
+          <li key={index}>
+            <strong>{entry.day}:</strong> {entry.workout}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
 
-export default TeamChallenges;
+export default TeamChallenge;
