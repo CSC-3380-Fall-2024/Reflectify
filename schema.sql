@@ -73,24 +73,23 @@ CREATE TABLE journal_entries (
 );
 
 CREATE TABLE habits (
-    habit_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
-    habit_name VARCHAR(100) NOT NULL,
-    description TEXT,
-    goal_count INT DEFAULT 1,
-    unit VARCHAR(50),
+    id INT AUTO_INCREMENT PRIMARY KEY,  
+    user_id INT NOT NULL,  
+    name VARCHAR(100) NOT NULL,  
+    target INT DEFAULT 1,  
+    frequency ENUM('daily', 'weekly', 'monthly') DEFAULT 'daily', 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
+
 CREATE TABLE habit_logs (
-    log_id INT AUTO_INCREMENT PRIMARY KEY,
-    habit_id INT,
-    user_id INT,
-    completed_on DATE NOT NULL,
-    streak INT DEFAULT 0,
-    FOREIGN KEY (habit_id) REFERENCES habits(habit_id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+    id INT AUTO_INCREMENT PRIMARY KEY, 
+    habit_id INT NOT NULL,  
+    date DATE NOT NULL,  
+    progress INT DEFAULT 0,  
+    FOREIGN KEY (habit_id) REFERENCES habits(id) ON DELETE CASCADE
 );
 
 CREATE TABLE friends (
