@@ -1,52 +1,73 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { HabitService } from '../../services/HabitService'; 
+import { Habit } from '../../types/HabitTypes'; 
 import './habittrack.css'; 
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-interface Habit {
-  id: string;
-  name: string;
-  streak: number;
-  completedDays: Set<string>; // Store dates as strings (e.g., '2024-11-22')
-}
-
 const HabitTracker: React.FC = () => {
-  const [habits, setHabits] = useState<Habit[]>([
-    { id: '1', name: 'Exercise', streak: 0, completedDays: new Set() },
-    { id: '2', name: 'Read', streak: 0, completedDays: new Set() },
-  ]);
-
+  const [habits, setHabits] = useState<Habit[]>([]);
   const [newHabit, setNewHabit] = useState<string>('');
 
-  const markHabitAsCompleted = (habitId: string) => {
-    const date = new Date().toISOString().split('T')[0]; // Get today's date
-    setHabits(prevHabits =>
-      prevHabits.map(habit => {
-        if (habit.id === habitId) {
-          const updatedDays = new Set(habit.completedDays);
-          updatedDays.add(date);
+  useEffect(() => {
+    fetchHabits();
+  }, []);
 
-          const newStreak = updatedDays.size > habit.streak ? updatedDays.size : habit.streak;
-          return { ...habit, completedDays: updatedDays, streak: newStreak };
-        }
-        return habit;
-      })
-    );
+  const fetchHabits = async () => {
+    try {
+      const habitsData = await HabitService.getAllHabits();
+      const updatedHabits = habitsData.map(habit => ({
+        ...habit,
+        completedDays: new Set<string>(), 
+        streak: 0, 
+      }));
+      setHabits(updatedHabits);
+    } catch (error) {
+      console.error('Error fetching habits:', error);
+    }
   };
 
-  const addHabit = () => {
+  const markHabitAsCompleted = async (habitId: number) => {
+    const date = new Date().toISOString().split('T')[0]; 
+    try {
+      await HabitService.createHabitLog(habitId, { date, progress: 1 });
+      setHabits(prevHabits =>
+        prevHabits.map(habit => {
+          if (habit.id === habitId) {
+            const updatedDays = new Set(habit.completedDays);
+            updatedDays.add(date);
+
+            const newStreak = updatedDays.size > (habit.streak || 0) ? updatedDays.size : habit.streak;
+            return { ...habit, completedDays: updatedDays, streak: newStreak };
+          }
+          return habit;
+        })
+      );
+    } catch (error) {
+      console.error('Error marking habit as completed:', error);
+    }
+  };
+
+  const addHabit = async () => {
     if (newHabit.trim() === '') return;
-    setHabits(prev => [
-      ...prev,
-      { id: (prev.length + 1).toString(), name: newHabit, streak: 0, completedDays: new Set() },
-    ]);
-    setNewHabit('');
+    try {
+      const newHabitData = await HabitService.createHabit({ name: newHabit, target: 1, frequency: 'daily' });
+      const habitWithDefaults: Habit = {
+        ...newHabitData,
+        completedDays: new Set<string>(), 
+        streak: 0,
+      };
+      setHabits(prev => [...prev, habitWithDefaults]);
+      setNewHabit('');
+    } catch (error) {
+      console.error('Error adding new habit:', error);
+    }
   };
 
   const getChartData = () => {
-    return habits.map(habit => habit.completedDays.size);
+    return habits.map(habit => habit.completedDays ? habit.completedDays.size : 0);
   };
 
   return (

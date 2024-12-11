@@ -20,6 +20,10 @@
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
+.header h1{
+  color: white;
+}
+
 .logo {
   margin: 20px 0;
 }
@@ -55,4 +59,38 @@
 
 .circle-button-link {
   text-decoration: none;
+}
+
+.rectangle-button {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 10px 0;
+  color: white;
+  font-weight: bold;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.emergency-button {
+  background-color: red;
+}
+
+.profile-button {
+  background-color: grey;
+}
+
+.rectangle-button:hover {
+  transform: scale(1.05);
+}
+
+.emergency-container {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

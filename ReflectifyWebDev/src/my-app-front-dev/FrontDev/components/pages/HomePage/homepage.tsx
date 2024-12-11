@@ -45,6 +45,21 @@ const Homepage: React.FC = () => {
                     </button>
                 </Link>
             </div>
+
+
+            <div className="emergency-container">
+                <Link to="/emergency-contacts" className="rectangle-button-link">
+                    <button className="rectangle-button emergency-button">
+                        Emergency Resources
+                    </button>
+                </Link>
+
+                <Link to="/my-profile" className="rectangle-button-link">
+                    <button className="rectangle-button profile-button">
+                        My Profile
+                    </button>
+                </Link>
+            </div>
         </div>
     );
 };
