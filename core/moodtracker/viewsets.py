@@ -1,8 +1,8 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from .models import MoodQuestion, MoodResponse, MoodLog
-from .serializers import MoodQuestionSerializer, MoodResponseSerializer, MoodLogSerializer
+from core.moodtracker.models import MoodQuestion, MoodResponse, MoodLog
+from core.moodtracker.serializers import MoodQuestionSerializer, MoodResponseSerializer, MoodLogSerializer
 
 class MoodQuestionViewSet(viewsets.ReadOnlyModelViewSet):
     """

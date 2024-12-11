@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import MoodQuestion, MoodResponse, MoodLog
+from core.moodtracker.models import MoodQuestion, MoodResponse, MoodLog
 
 class MoodQuestionSerializer(serializers.ModelSerializer):
     class Meta:
