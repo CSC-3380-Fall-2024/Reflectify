@@ -22,6 +22,9 @@ const Register: React.FC = () => {
             });
 
             if (response.status === 201) {
+                localStorage.setItem('username', username);
+                localStorage.setItem('email', email);
+
                 setSuccess('Registration successful! Please log in.');
                 setUsername('');
                 setEmail('');

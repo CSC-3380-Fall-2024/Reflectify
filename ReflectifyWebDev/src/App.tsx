@@ -9,6 +9,10 @@ import HabitTracker from './my-app-front-dev/FrontDev/components/pages/HabitTrac
 import PersonalJournal from './my-app-front-dev/FrontDev/components/pages/PersonalJournal/perjournal.tsx';
 import MoodStress from './my-app-front-dev/FrontDev/components/pages/MoodTracker/moodtracker.tsx';
 import WellnessResources from './my-app-front-dev/FrontDev/components/pages/WellnessResources/wellnessresources.tsx';
+import MyProfile from './my-app-front-dev/FrontDev/components/pages/MyProfile/myprofile.tsx';
+import EmergencyContacts from './my-app-front-dev/FrontDev/components/pages/EmergencyContacts/emergency.tsx';
+import TeamChallenges from './my-app-front-dev/FrontDev/components/pages/TeamChallenges/teamchallenge.tsx';
+
 
 const App: React.FC = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -31,6 +35,10 @@ const App: React.FC = () => {
               <Route path = "/mood-stress-tracker" element={isLoggedIn ? <MoodStress /> : <Navigate to="/login" />} /> 
               <Route path = "/habit-tracker" element={isLoggedIn ? <HabitTracker /> : <Navigate to="/login" />} />
               <Route path = "/wellness-resources" element={isLoggedIn ? <WellnessResources /> : <Navigate to="/login" />} />
+              <Route path="/my-profile" element={isLoggedIn ? <MyProfile /> : <Navigate to="/login" />} />
+              <Route path="/emergency-contacts" element={isLoggedIn ? <EmergencyContacts /> : <Navigate to="/login" />} />
+              <Route path="/team-challenges" element={isLoggedIn ? <TeamChallenges /> : <Navigate to="/login" />} />
+
               <Route path="*" element={<Navigate to="/login" />} />
           </Routes>
           </main>
