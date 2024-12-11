@@ -1,0 +1,20 @@
+body {
+    background-color: white;
+    font-family: Arial, sans-serif;
+}
+
+.mood-tracker {
+    text-align: center;
+    padding: 20px;
+}
+
+.mood-info {
+    background-color: lightgrey;
+    padding: 20px;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+.mood-box, .scores-box {
+    margin: 10px 0;
+}
