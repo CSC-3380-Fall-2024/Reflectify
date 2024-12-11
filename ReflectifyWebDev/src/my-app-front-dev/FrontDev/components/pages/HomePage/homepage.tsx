@@ -27,7 +27,7 @@ const Homepage: React.FC = () => {
                     </button>
                 </Link>
 
-                <Link to="/another-page" className="circle-button-link">
+                <Link to="/connect-friends" className="circle-button-link">
                     <button className="circle-button">
                         Connect With Friends
                     </button>
@@ -35,7 +35,7 @@ const Homepage: React.FC = () => {
 
                 <Link to="/team-challenges" className="circle-button-link">
                     <button className="circle-button">
-                        Team Challenges
+                        Weekly Challenges
                     </button>
                 </Link>
 
