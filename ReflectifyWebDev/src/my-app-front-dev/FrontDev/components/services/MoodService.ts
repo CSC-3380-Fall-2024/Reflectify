@@ -1,5 +1,5 @@
 import axios from "axios";
-import { MoodQuestion, MoodResponse, MoodLog } from "../types/moodtracker";
+import { MoodQuestion, MoodResponse, MoodLog } from "../types/MoodTypes";
 
 const API_URL = "'http://localhost:8000/api/moodtracker/'";
 

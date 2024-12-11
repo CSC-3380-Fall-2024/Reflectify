@@ -65,7 +65,6 @@ ADD CONSTRAINT check_mood_score CHECK (score >= 0 AND score <= 10);
 CREATE TABLE journal_entries (
     entry_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
-    title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

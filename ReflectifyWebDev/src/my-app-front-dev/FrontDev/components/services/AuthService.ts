@@ -5,19 +5,19 @@ const API_URL = 'http://localhost:8000/api/auth/';
 
 export const AuthService = {
     login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
-        console.log('Sending credentials:', credentials);  // Log credentials for debugging
+        console.log('Sending credentials:', credentials);  
         
         try {
             const response = await axios.post(`${API_URL}login/`, credentials, {
                 headers: {
-                    'Content-Type': 'application/json',  // Make sure content type is correct
+                    'Content-Type': 'application/json',  
                 }
             });
-            console.log('Login response:', response);  // Log response for debugging
-            return response.data;  // Return the response data
+            console.log('Login response:', response);  
+            return response.data; 
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                console.error('Error response:', error.response);  // Log the full error response for debugging
+                console.error('Error response:', error.response);  
                 throw new Error(error.response.data.detail || 'An error occurred during login.');
             } else {
                 console.error('Unexpected error:', error);
@@ -30,14 +30,14 @@ export const AuthService = {
         try {
             const response = await axios.post(`${API_URL}register/`, userData, {
                 headers: {
-                    'Content-Type': 'application/json',  // Ensure content type is correct
+                    'Content-Type': 'application/json',  
                 }
             });
-            console.log('Registration response:', response);  // Log response for debugging
+            console.log('Registration response:', response); 
             return response.data;
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                console.error('Error response:', error.response);  // Log the error response
+                console.error('Error response:', error.response);  
                 throw new Error(error.response.data.detail || 'An error occurred during registration.');
             } else {
                 console.error('Unexpected error:', error);
@@ -50,14 +50,14 @@ export const AuthService = {
         try {
             const response = await axios.post(`${API_URL}refresh/`, { refresh: refreshToken }, {
                 headers: {
-                    'Content-Type': 'application/json',  // Ensure content type is correct
+                    'Content-Type': 'application/json',  
                 }
             });
-            console.log('Refresh token response:', response);  // Log response for debugging
+            console.log('Refresh token response:', response); 
             return response.data;
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                console.error('Error response:', error.response);  // Log the error response
+                console.error('Error response:', error.response);  
                 throw new Error(error.response.data.detail || 'An error occurred while refreshing the token.');
             } else {
                 console.error('Unexpected error:', error);

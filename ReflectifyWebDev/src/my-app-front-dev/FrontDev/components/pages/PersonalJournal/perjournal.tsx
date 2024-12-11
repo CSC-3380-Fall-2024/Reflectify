@@ -7,7 +7,6 @@ const PersonalJournal: React.FC = () => {
   const [entry, setEntry] = useState<string>('');
   const [entries, setEntries] = useState<JournalEntry[]>([]); 
 
-// Fetch entries from backend when component loads
   useEffect(() => {
   const fetchEntries = async () => {
     try {
@@ -28,9 +27,9 @@ const PersonalJournal: React.FC = () => {
   const handleSave = async () => {
    if (entry.trim()) {
     try {
-          const newEntry = await JournalService.createEntry({ title: 'New Entry', content: entry }); // Save entry to backend
-          setEntries([...entries, newEntry]); // Add new entry to the state
-        setEntry(''); // Clear the text area
+          const newEntry = await JournalService.createEntry({ title: 'New Entry', content: entry }); 
+          setEntries([...entries, newEntry]); 
+        setEntry(''); 
       } catch (error) {
         console.error('Error saving entry:', error);
       }
@@ -39,8 +38,8 @@ const PersonalJournal: React.FC = () => {
 
   const handleDelete = async (id: number) => {
     try {
-      await JournalService.deleteEntry(id); // Delete entry from backend
-      setEntries(entries.filter(entry => entry.id !== id)); // Update state after deletion
+      await JournalService.deleteEntry(id);
+      setEntries(entries.filter(entry => entry.id !== id));
     } catch (error) {
       console.error('Error deleting entry:', error);
     }

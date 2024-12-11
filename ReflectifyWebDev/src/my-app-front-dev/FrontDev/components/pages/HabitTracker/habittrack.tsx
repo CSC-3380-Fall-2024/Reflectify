@@ -9,7 +9,7 @@ interface Habit {
   id: string;
   name: string;
   streak: number;
-  completedDays: Set<string>; // Store dates as strings (e.g., '2024-11-22')
+  completedDays: Set<string>; 
 }
 
 const HabitTracker: React.FC = () => {
@@ -21,7 +21,7 @@ const HabitTracker: React.FC = () => {
   const [newHabit, setNewHabit] = useState<string>('');
 
   const markHabitAsCompleted = (habitId: string) => {
-    const date = new Date().toISOString().split('T')[0]; // Get today's date
+    const date = new Date().toISOString().split('T')[0]; 
     setHabits(prevHabits =>
       prevHabits.map(habit => {
         if (habit.id === habitId) {

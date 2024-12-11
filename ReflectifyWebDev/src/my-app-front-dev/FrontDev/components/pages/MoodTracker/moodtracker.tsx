@@ -9,10 +9,9 @@ const MoodTracker: React.FC = () => {
     const [result, setResult] = useState<MoodResponse | null>(null);
 
     const handleAnswerClick = (score: number) => {
-        // Add the selected score to answers array
+    
         setAnswers([...answers, score]);
 
-        // Move to the next question or submit answers if it's the last question
         if (currentQuestionIndex + 1 < questions.length) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
         } else {
@@ -29,7 +28,7 @@ const MoodTracker: React.FC = () => {
             });
 
             const data: MoodResponse = await response.json();
-            setResult(data); // Store the response (mood and score)
+            setResult(data); 
         } catch (error) {
             console.error("Error submitting answers:", error);
         }

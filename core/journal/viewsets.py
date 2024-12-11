@@ -2,7 +2,6 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from core.journal.models import JournalEntry
 from core.journal.serializers import JournalEntrySerializer
-
 from typing import Type
 
 class JournalEntryViewSet(viewsets.ModelViewSet):

@@ -3,9 +3,8 @@ from django.conf import settings
 
 class MoodQuestion(models.Model):
     question_text = models.TextField()
-    options = models.JSONField()  # Stores possible answers as JSON, e.g., ["1", "2", "3", "4", "5"]
-    category = models.CharField(max_length=50)  # Category of the question (e.g., "stress", "happiness")
-
+    options = models.JSONField()  
+    category = models.CharField(max_length=50)  
     def __str__(self) -> str:
         return f"{self.category}: {self.question_text[:50]}..."
 
@@ -13,7 +12,7 @@ class MoodQuestion(models.Model):
 class MoodResponse(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="mood_responses")
     question = models.ForeignKey(MoodQuestion, on_delete=models.CASCADE, related_name="responses")
-    answer = models.PositiveIntegerField()  # User's selected option (e.g., 1-5)
+    answer = models.PositiveIntegerField()  
     response_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
@@ -22,7 +21,7 @@ class MoodResponse(models.Model):
 
 class MoodLog(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="mood_logs")
-    score = models.PositiveIntegerField()  # Aggregated score from mood responses
+    score = models.PositiveIntegerField()  
     log_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
