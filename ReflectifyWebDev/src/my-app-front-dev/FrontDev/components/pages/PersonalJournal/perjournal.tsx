@@ -69,6 +69,7 @@ const PersonalJournal: React.FC = () => {
   };
 
   const handleSave = async () => {
+
     if (entry.trim()) {
       try {
         const response = await api.post<JournalEntry>('/journal/', { content: entry });
@@ -89,6 +90,7 @@ const PersonalJournal: React.FC = () => {
         } else {
           console.error('Incomplete entry data received from server:', newEntry);
         }
+
       } catch (error) {
         console.error('Error saving entry to server:', error);
   
@@ -114,6 +116,7 @@ const PersonalJournal: React.FC = () => {
 
   const handleDelete = async (id: number) => {
     try {
+
       await api.delete(`/journal/${id}/`);
       setEntries(entries.filter((entry) => entry.id !== id));
 
@@ -122,6 +125,7 @@ const PersonalJournal: React.FC = () => {
         const updatedLocalEntries = JSON.parse(localEntries).filter((entry: JournalEntry) => entry.id !== id);
         localStorage.setItem('localJournalEntries', JSON.stringify(updatedLocalEntries));
       }
+
     } catch (error) {
       console.error('Error deleting entry:', error);
     }

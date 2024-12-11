@@ -7,11 +7,14 @@ const REFRESH_TOKEN_KEY = 'refresh_token';
 
  export const AuthService = {
     login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
+
         console.log('Sending credentials:', credentials);
+
         
         try {
             const response = await axios.post(`${API_URL}login/`, credentials, {
                 headers: {
+
                     'Content-Type': 'application/json',
                 }
             });
@@ -25,6 +28,7 @@ const REFRESH_TOKEN_KEY = 'refresh_token';
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
                 console.error('Error response:', error.response);
+
                 throw new Error(error.response.data.detail || 'An error occurred during login.');
             } else {
                 console.error('Unexpected error:', error);
@@ -37,6 +41,7 @@ const REFRESH_TOKEN_KEY = 'refresh_token';
         try {
             const response = await axios.post(`${API_URL}register/`, userData, {
                 headers: {
+
                     'Content-Type': 'application/json',
                 }
             });
@@ -45,6 +50,7 @@ const REFRESH_TOKEN_KEY = 'refresh_token';
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
                 console.error('Error response:', error.response);
+
                 throw new Error(error.response.data.detail || 'An error occurred during registration.');
             } else {
                 console.error('Unexpected error:', error);
@@ -62,6 +68,7 @@ const REFRESH_TOKEN_KEY = 'refresh_token';
         try {
             const response = await axios.post(`${API_URL}refresh/`, { refresh: refreshToken }, {
                 headers: {
+
                     'Content-Type': 'application/json',
                 }
             });
@@ -75,6 +82,7 @@ const REFRESH_TOKEN_KEY = 'refresh_token';
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
                 console.error('Error response:', error.response);
+
                 throw new Error(error.response.data.detail || 'An error occurred while refreshing the token.');
             } else {
                 console.error('Unexpected error:', error);

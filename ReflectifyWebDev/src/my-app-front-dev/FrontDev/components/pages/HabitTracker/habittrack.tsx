@@ -11,6 +11,7 @@ const HabitTracker: React.FC = () => {
   const [habits, setHabits] = useState<Habit[]>([]);
   const [newHabit, setNewHabit] = useState<string>('');
 
+
   useEffect(() => {
     fetchHabits();
   }, []);
